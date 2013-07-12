@@ -13,6 +13,7 @@ GIVEN PYTHON FILES:
 
 1. count_cfg_freq.py - Takes a JSON tree file, outputs the counts and types of each: NONTERMINAL, UNARYRULE, BINARYRULE
 2. eval_parser.py - compares two files (for the development sent) and gives the efficiency of your analysis. 
+3. pretty_print_tree.py - Makes indented versions of trees. Takes single-line-tree fomrat files. 
 
 GIVEN TEXT FILES:
 1. parse_train.dat - Each line represents a sentences, parsed into its lexical tree, stored in JSON format. The first is the data, the second the right branch, the third the left branch, until it terminates with a terminal (actual word) and it's tag, stored as ["TAG", "word"]
@@ -23,4 +24,5 @@ GIVEN TEXT FILES:
 6. tree.example - A single tree in JSON as an example
 
 GENERATED TEXT FILES
-1. 
+1. new.counts - Counts with _RARE_ type
+2. 
