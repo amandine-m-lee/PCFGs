@@ -1,6 +1,7 @@
 import json
 from sys import argv
 
+#TODO: Commenting
 def get_rares(countsname):
     
     with open(countsname) as countsrc:
@@ -17,6 +18,8 @@ def get_rares(countsname):
             
 def recursive_rr(tree, rareset):
 #tree must be a json object
+#TODO: Make flexible, make a decorator with two functions as arguments? one for terminals
+#one for non-terminals
     if len(tree) == 2:
         tag = tree[0]
         word = tree[1]
@@ -27,8 +30,10 @@ def recursive_rr(tree, rareset):
         recursive_rr(tree[2], rareset)
     else:
         error("Not lexical tree")
+#TODO: Apply to every item in a list more directly? Well that's what list comprehension does
+#
 
-def replace_all_trees(jtrees, rareset):
+def replace_all_trees(jtrees, rareset): #Apply to every tree in list, make more general. 
     for tree in jtrees:
         recursive_rr(tree, rareset)
 
@@ -44,7 +49,7 @@ def get_json_trees_from_file(filename):
     tree_strings = open(filename).readlines()
     return [json.loads(line) for line in tree_strings]
 
-
+#TODO: Make ordering more logical
 
 if __name__ == "__main__":
     script, counts_file, train_file, dest_file = argv
@@ -56,4 +61,4 @@ if __name__ == "__main__":
 
     write_trees(dest_file, jtrees)
     
-
+    
