@@ -1,5 +1,5 @@
-from collections import defaultdict
 from __future__ import division
+from collections import defaultdict
 
 
 class ProbGen(object):
