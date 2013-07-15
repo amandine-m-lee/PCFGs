@@ -1,9 +1,15 @@
+"""This script and its memeber fuunctions can be used to take a JSON encripted
+list of trees, separated by newlines, and a file of the unary rule counts (i.e.
+NOUN -> apple) and replace the terminals with (apple) fewer than 5 counts given 
+a specific tag (NOUN) with '_RARE_'"""
+
 import json
 from sys import argv
 
-#TODO: Commenting
 def get_rares(countsname):
-    
+    """Compiles and returns a set of the "rare" (word, tag) values from a file of unary
+    rule counts of name 'countsname'."""
+
     with open(countsname) as countsrc:
         
         rares = set()
@@ -17,6 +23,8 @@ def get_rares(countsname):
         return rares
             
 def recursive_rr(tree, rareset):
+    """Takes a nested list in loaded JSON format and a set of rare (word, tag) pairs
+    and returns the """ #TODO fix this thingy. 
 #tree must be a json object
 #TODO: Make flexible, make a decorator with two functions as arguments? one for terminals
 #one for non-terminals

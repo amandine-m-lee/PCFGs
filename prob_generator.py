@@ -36,13 +36,14 @@ class ProbGen(object):
 
 
     def get_counts(self, filename):
-
+#Not super sure if this is the best way of doing it. 
         lines = self.get_lines(filename)
 
         nonterms = [line.split() for line in lines if 'NONTERMINAL' in line]
         unarys = [line.split() for line in lines if 'UNARYRULE' in line]
         binarys = [line.split() for line in lines if 'BINARYRULE' in line]
 
+#Make this a decorator?
         for line in nonterms:
             count, rule, nt = line
             count = int(count)
