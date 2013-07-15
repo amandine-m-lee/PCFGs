@@ -3,7 +3,9 @@ from collections import defaultdict
 
 
 class ProbGen(object):
-
+    """ The ProbGen classes allows you to read and store a file of unary and binary
+    rule counts and nonterminal counts, extracted from a training lexical tree, and then
+    generate the probabilties of a specific rule or terminal emission"""
 
     def __init__(self, source_file):
         if source_file is None:
@@ -15,14 +17,13 @@ class ProbGen(object):
         self.unary_counts = defaultdict(defaultdict(int))
         self.binary_counts = defaultdict(dict)
 
+        self.populate_dicts()
+
     def get_sourcename(self):
     
-        """ FUNCTION: get_sourcename 
-            ARGUMETNS: self
-
-            Gets user input for the filename of the source file (should 
-            be of the same form as gene.counts). Checks for valid file and 
-            if invalid prompts again"""
+        """ Gets user input for the filename of the source file, which should be of form:
+            <#> <RULETYPE> <other arguments...>
+            Checks for valid file and if invalid prompts again"""
 
         valid_file = False
         while not valid_file:
@@ -35,9 +36,11 @@ class ProbGen(object):
         return file_name
 
 
-    def get_counts(self, filename):
-#Not super sure if this is the best way of doing it. 
-        lines = self.get_lines(filename)
+    def populate_dicts(self):
+        """ Using the srcname member, get_counts separates the records into the 
+            respective tyeps: counts of nonterminals (i.e. VP = verbphrase, DT determiner)
+            counts unary rules (i.e. DT -> 'the') and binary rules (i.e NP -> JJ, NP)
+            """
 
         nonterms = [line.split() for line in lines if 'NONTERMINAL' in line]
         unarys = [line.split() for line in lines if 'UNARYRULE' in line]
@@ -61,6 +64,7 @@ class ProbGen(object):
 
 
     def get_lines(self, filename):
+        """Opens the file and returns a list of strings representing each line"""
         with file(filename) as src:
             return src.readlines()
 #TODO: Get defaults working correctly. Divide by zero conern. 
@@ -70,8 +74,5 @@ class ProbGen(object):
        
     def emm_prob(self, tag, word):
         return self.unary_counts[tag][word] / self.nonterm_counts[tag]
-
-    
-def cky_aglo(probgen, srcfile, destfile):
 
 
