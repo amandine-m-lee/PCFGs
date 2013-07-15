@@ -42,25 +42,23 @@ class ProbGen(object):
             counts unary rules (i.e. DT -> 'the') and binary rules (i.e NP -> JJ, NP)
             """
 
-        nonterms = [line.split() for line in lines if 'NONTERMINAL' in line]
-        unarys = [line.split() for line in lines if 'UNARYRULE' in line]
-        binarys = [line.split() for line in lines if 'BINARYRULE' in line]
+        lines = self.get_lines(self.srcname)
 
-#Make this a decorator?
-        for line in nonterms:
-            count, rule, nt = line
-            count = int(count)
-            self.nonterm_counts[nt] = count
+        for line in lines:
+            parts = line.split()
+            rt = parts[1]
 
-        for line in unarys:
-            count, rule, tag, word = line.split()
-            count = int(count)
-            self.unary_counts[tag][word] = count
+            if rt == 'NONTERMINAL':
+                count, _, nt = parts
+                self.nonterm_counts[nt] = int(count)
 
-        for line in binarys:
-            count, rule, root, left, right = line.split()
-            count = int(count)
-            self.binary_counts[root][(left, right)] = count
+            elif rt == 'UNARYRULE':
+                count, _, tag, word = parts
+                self.unary_counts[tag][word] = int(count)
+            
+            elif rt == 'BINARYRULE':
+                count, _, root, right, left = parts
+                self.binary_counts[root][(right, left)] = int(count)
 
 
     def get_lines(self, filename):
