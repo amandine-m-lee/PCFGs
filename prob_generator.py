@@ -13,8 +13,8 @@ class ProbGen(object):
         else:
             self.srcname = source_file
 
-        self.nonterm_counts = defaultdict(int)
-        self.unary_counts = defaultdict(defaultdict(int))
+        self.nonterm_counts = {}
+        self.unary_counts = defaultdict(dict)
         self.binary_counts = defaultdict(dict)
 
         self.populate_dicts()
@@ -67,10 +67,23 @@ class ProbGen(object):
             return src.readlines()
 #TODO: Get defaults working correctly. Divide by zero conern. 
     def branching_prob(self, root, left, right):
-        return self.binary_counts[root][(left, right)] /\
-                self.nonterm_counts[root]
+        """Returns p(left, right | root), i.e. the probability of a binary rule given
+        the root"""
+
+        num = self.binary_counts[root].get((left, right), 0)
+        try:
+            denom = self.nonterm_counts[root] 
+        except KeyError as e: #Not sure what to do with this error
+            print "Undefined probabilty: root nonterminal does not exist"
+            raise
+        
+        return num/denom 
        
     def emm_prob(self, tag, word):
+        """Returns p(word | tag), the emission probability"""
+
+        num = self.unary_counts[tag].get(word, 0)
+        denom = self.nonterm_counts[tag]
         return self.unary_counts[tag][word] / self.nonterm_counts[tag]
 
 
