@@ -1,12 +1,11 @@
 import json
 from prob_generator import ProbGen
 
-ACC = ['S']
+PROBTABLE = {}
 
-def main(srcname, rawname, destname):
+def main(pg, rawname, destname):
 #It should return a list of json encoded trees. 
 #How do I create a json thingy?    
-    pg = ProbGen(srcfile)
     sentences = get_sentences(rawname)
 
     py_trees = [cky_recursive(sent, pg) for sent in sentences]
