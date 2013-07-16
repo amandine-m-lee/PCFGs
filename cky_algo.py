@@ -27,7 +27,10 @@ def cky_help(i,j, sent, X, pg):
         pi = pg.emm_prob(X, sent[i])
         return [X, sent[i]], pi
     else:
-        left, right, pi = get_max_of_all(i, j, sent, X, pg)
+        if (j, j, X) in PROBTABLE:
+            left, right, pi = PROBTABLE[(i, j, X)]
+        else:
+            left, right, pi = get_max_of_all(i, j, sent, X, pg)
 
         return [X, left, right], pi
 
