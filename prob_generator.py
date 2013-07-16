@@ -54,7 +54,7 @@ class ProbGen(object):
 
             elif rt == 'UNARYRULE':
                 count, _, tag, word = parts
-                self.unary_counts[tag][word] = int(count)
+                self.unary_counts[word][tag] = int(count)
             
             elif rt == 'BINARYRULE':
                 count, _, root, right, left = parts
@@ -84,6 +84,7 @@ class ProbGen(object):
 
         num = self.unary_counts[tag].get(word, 0)
         denom = self.nonterm_counts[tag]
-        return self.unary_counts[tag][word] / self.nonterm_counts[tag]
+        return self.unary_counts[word][tag] / self.nonterm_counts[tag]
+
 
 
