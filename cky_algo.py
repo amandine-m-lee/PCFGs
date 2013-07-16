@@ -15,12 +15,15 @@ def main(pg, rawname, destname):
 
 
 def cky_recursive(sentence, probgen):
-    return cky_help(1, len(sentence), 'S', probgen)
+    return cky_help(0, len(sentence) - 1, sentence, 'S', probgen)
 
 def cky_help(i,j, sent, X, pg):
 
+    print i, j
+
     if i == j:
-        X = max(pg.nonterm_counts.key(), key= lambda x: pg.emm_prob(x, sent[i]))
+        print "GOT THERE!!!"
+        X = max(pg.nonterm_counts.keys(), key= lambda x: pg.emm_prob(x, sent[i]))
         pi = pg.emm_prob(X, sent[i])
         return [X, sent[i]], pi
     else:
@@ -36,7 +39,7 @@ def get_max_of_all(i, j, sent, X, pg):
     Z = []
 
     for rule in rule_possibilites:
-        for s in xrange(i, j+1):
+        for s in range(i, j+1):
             y, z = rule
             p_rule = pg.branching_prob(X, y, z)
             left, p_left = cky_help(i, s, sent, y, pg)
@@ -48,14 +51,16 @@ def get_max_of_all(i, j, sent, X, pg):
                 Y = left
                 Z = right
 
+    PROBTABLE[(i, j, X)] = (Y, Z, best)
+
     return Y, Z, best
 
 
 
 #Write a generator!
 def get_sentences(rawname):
-    with open(srcfile) as f:
-        return [line.split() for line in f.getlines()]
+    with open(rawname) as f:
+        return [line.split() for line in f.readlines()]
 
 
 
@@ -75,5 +80,5 @@ def write_trees(json_trees, destname):
 
 
 if __name__ == '__main__':
-    main('new.counts', 'parse_dev.dat', 'out_dev.dat')
+    main(ProbGen('new.counts'), 'parse_dev.dat', 'out_dev.dat')
 
