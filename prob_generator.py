@@ -65,7 +65,7 @@ class ProbGen(object):
         """Opens the file and returns a list of strings representing each line"""
         with file(filename) as src:
             return src.readlines()
-#TODO: Get defaults working correctly. Divide by zero conern. 
+    
     def branching_prob(self, root, left, right):
         """Returns p(left, right | root), i.e. the probability of a binary rule given
         the root"""
