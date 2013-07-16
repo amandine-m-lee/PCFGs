@@ -8,6 +8,12 @@ class ProbGen(object):
     generate the probabilties of a specific rule or terminal emission"""
 
     def __init__(self, source_file):
+        """MEMBERS:
+        nonterm_counts - Dictionary of {nonterminal::str : count::int}
+        unary_counts - Dictionary of {word::string : {tag::string : count::int}}
+        binary_counts - Dictionary of 
+            {root::string : {(left::string, right::string) : count::int}}"""
+
         if source_file is None:
             self.srcname = self.get_sourcename()
         else:
