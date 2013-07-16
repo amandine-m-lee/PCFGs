@@ -89,8 +89,12 @@ class ProbGen(object):
         """Returns p(word | tag), the emission probability"""
 
         num = self.unary_counts[tag].get(word, 0)
-        denom = self.nonterm_counts[tag]
-        return self.unary_counts[word][tag] / self.nonterm_counts[tag]
+        try:
+            denom = self.nonterm_counts[tag]
+        except KeyError:
+            print self.nonterm_counts.keys()
+            raise
 
+        return num/denom
 
 
