@@ -9,12 +9,13 @@ def main(pg, rawname, destname):
     sentences = get_sentences(rawname)
 
     py_trees = [cky_recursive(sent, pg) for sent in sentences]
-    json_trees, prob = [json.dumps(tree) for tree in py_trees]
+    json_trees = [tree[0] for tree in py_trees]
 
     write_trees(json_trees, destname)
 
 
 def cky_recursive(sentence, probgen):
+    print sentence
     global PI 
     PI = {}
     return cky_help(0, len(sentence) - 1, sentence, 'S', probgen)
@@ -62,20 +63,15 @@ def get_sentences(rawname):
 
 
 
-def write_trees(json_trees, destname):
+def write_trees(json_trees, dest_name):
     """Takes a name for the destination function and a list of json encoded trees
     and prints to file, separated by newline characters"""
 
-    dest = open(dest_name, 'w')
+    with open(dest_name, 'w') as dest:
 
-    for tree in json_trees:
-        dest.write(json.dumps(tree))
-        dest.write('\n')
-
-    
-
-
-
+        for tree in json_trees:
+            dest.write(json.dumps(tree))
+            dest.write('\n')
 
 if __name__ == '__main__':
     main(ProbGen('new.counts'), 'parse_dev.dat', 'out_dev.dat')
