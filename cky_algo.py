@@ -1,7 +1,7 @@
 import json
 from prob_generator import ProbGen
 
-PROBTABLE = {}
+PI = {}
 
 def main(pg, rawname, destname):
 #It should return a list of json encoded trees. 
@@ -15,34 +15,33 @@ def main(pg, rawname, destname):
 
 
 def cky_recursive(sentence, probgen):
+    global PI 
+    PI = {}
     return cky_help(0, len(sentence) - 1, sentence, 'S', probgen)
 
 def cky_help(i,j, sent, X, pg):
 
-    print i, j
-
     if i == j:
-        print "GOT THERE!!!"
-        X = max(pg.nonterm_counts.keys(), key= lambda x: pg.emm_prob(x, sent[i]))
         pi = pg.emm_prob(X, sent[i])
+        print pi, X, sent[i:j+1]
         return [X, sent[i]], pi
-    else:
-        if (j, j, X) in PROBTABLE:
-            left, right, pi = PROBTABLE[(i, j, X)]
+    else: #Do if not instead
+        if (i, j, X) in PI:
+            left, right, prob = PI[(i, j, X)]
         else:
-            left, right, pi = get_max_of_all(i, j, sent, X, pg)
+            left, right, prob = get_max_of_all(i, j, sent, X, pg)
 
-        return [X, left, right], pi
+        return [X, left, right], prob
 
         
 def get_max_of_all(i, j, sent, X, pg):
     rule_possibilites = pg.binary_counts[X].keys()
-    best = 0
+    best = -1
     Y = []
     Z = []
 
     for rule in rule_possibilites:
-        for s in range(i, j+1):
+        for s in range(i, j):
             y, z = rule
             p_rule = pg.branching_prob(X, y, z)
             left, p_left = cky_help(i, s, sent, y, pg)
@@ -54,7 +53,7 @@ def get_max_of_all(i, j, sent, X, pg):
                 Y = left
                 Z = right
 
-    PROBTABLE[(i, j, X)] = (Y, Z, best)
+    PI[(i, j, X)] = (Y, Z, best)
 
     return Y, Z, best
 
