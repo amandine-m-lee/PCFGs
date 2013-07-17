@@ -22,23 +22,22 @@ def cky_recursive(sentence, probgen):
 def cky_help(i,j, sent, X, pg):
 
     if i == j:
-        pi = pg.emm_prob(X, sent[i])
-        print pi, X, sent[i:j+1]
-        return [X, sent[i]], pi
-    else: #Do if not instead
-        if (i, j, X) in PI:
-            left, right, prob = PI[(i, j, X)]
-        else:
-            left, right, prob = get_max_of_all(i, j, sent, X, pg)
+        prob = pg.emm_prob(X, sent[i])
+        return [X, sent[i]], prob
+    else:
+        if not (i, j, X) in PI:
+            PI[(i, j, X)] = get_max_of_all(i, j, sent, X, pg)
+            
+        left, right, prob = PI[(i, j, X)]
 
         return [X, left, right], prob
 
         
 def get_max_of_all(i, j, sent, X, pg):
     rule_possibilites = pg.binary_counts[X].keys()
-    best = -1
-    Y = []
-    Z = []
+    best = -0
+    Y = None
+    Z = None
 
     for rule in rule_possibilites:
         for s in range(i, j):
@@ -46,17 +45,14 @@ def get_max_of_all(i, j, sent, X, pg):
             p_rule = pg.branching_prob(X, y, z)
             left, p_left = cky_help(i, s, sent, y, pg)
             right, p_right = cky_help(s+1, j, sent, z, pg)
-            pi = p_rule * p_left * p_right
-            
-            if pi > best:
-                best = pi
+            prob = p_rule * p_left * p_right
+
+            if prob > best:
+                best = prob
                 Y = left
                 Z = right
 
-    PI[(i, j, X)] = (Y, Z, best)
-
     return Y, Z, best
-
 
 
 #Write a generator!
