@@ -87,12 +87,18 @@ class ProbGen(object):
        
     def emm_prob(self, tag, word):
         """Returns p(word | tag), the emission probability"""
-
-        num = self.unary_counts[tag].get(word, 0)
+        
+        if tag in self.unary_counts[word]:
+            num = self.unary_counts[word][tag]
+        elif tag in self.unary_counts['_RARE_']:
+            num = self.unary_counts['_RARE_'][tag]
+        else:
+            num = 0
+            
         try:
             denom = self.nonterm_counts[tag]
         except KeyError:
-            print self.nonterm_counts.keys()
+            print "Tag never seen before"
             raise
 
         return num/denom
