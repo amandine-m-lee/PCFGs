@@ -39,23 +39,34 @@ def cky_help(i,j, sent, X, pg):
 
         
 def get_max_of_all(i, j, sent, X, pg):
+    
     rule_possibilites = pg.binary_counts[X].keys()
-    best = -0
+    best = float("-inf")
     Y = None
     Z = None
 
     for rule in rule_possibilites:
         for s in range(i, j):
+
             y, z = rule
             p_rule = pg.branching_prob(X, y, z)
             left, p_left = cky_help(i, s, sent, y, pg)
             right, p_right = cky_help(s+1, j, sent, z, pg)
-            prob = p_rule * p_left * p_right
+            
+            prob = p_right + p_left + p_rule
+            if i == 0 and j == len(sent) - 1:
+                print y, z, p_rule, p_right, p_left
+
 
             if prob > best:
                 best = prob
                 Y = left
                 Z = right
+
+
+    """if Y is None or Z is None:
+        print sent[i:j+1]
+        print X, rule_possibilites"""
 
     return Y, Z, best
 

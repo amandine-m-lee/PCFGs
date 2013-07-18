@@ -1,5 +1,6 @@
 from __future__ import division
 from collections import defaultdict
+import math
 
 
 class ProbGen(object):
@@ -76,31 +77,36 @@ class ProbGen(object):
         """Returns p(left, right | root), i.e. the probability of a binary rule given
         the root"""
 
-        num = self.binary_counts[root].get((left, right), 0)
+        num = self.binary_counts[root].get((left, right), None)
         try:
             denom = self.nonterm_counts[root] 
         except KeyError as e: #Not sure what to do with this error
             print "Undefined probabilty: root nonterminal does not exist"
             raise
-        
-        return num/denom 
+
+        if num is None:
+            return float("-inf")
+        else:
+            return math.log(num/denom)
        
     def emm_prob(self, tag, word):
         """Returns p(word | tag), the emission probability"""
         
-        if tag in self.unary_counts[word]:
-            num = self.unary_counts[word][tag]
+        if word in self.unary_counts:
+            num = self.unary_counts[word].get(tag, None)
         elif tag in self.unary_counts['_RARE_']:
             num = self.unary_counts['_RARE_'][tag]
         else:
-            num = 0
-            
+            num = None            
         try:
             denom = self.nonterm_counts[tag]
         except KeyError:
             print "Tag never seen before"
             raise
-
-        return num/denom
+        
+        if num is None:
+            return float("-inf")
+        else: 
+            return math.log(num/denom)
 
 
