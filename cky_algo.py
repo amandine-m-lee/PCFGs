@@ -44,6 +44,10 @@ def get_max_of_all(i, j, sent, X, pg):
     best = float("-inf")
     Y = None
     Z = None
+    best_right = float("-inf")
+    best_left = float("-inf")
+    LEFT = ''
+    RIGHT = ''
 
     for rule in rule_possibilites:
         for s in range(i, j):
@@ -54,14 +58,23 @@ def get_max_of_all(i, j, sent, X, pg):
             right, p_right = cky_help(s+1, j, sent, z, pg)
             
             prob = p_right + p_left + p_rule
-            #if i == 0 and j == len(sent) - 1:
-             #   print y, z, p_rule, p_right, p_left
-
-
+            if i == 0 and j == len(sent) - 1:
+                print y, z, rule, p_rule, left, p_left, right, p_left
+            
+            if best_left < p_left:
+                best_left = p_left
+                LEFT = left
+            if best_right < p_right:
+                best_right = p_right
+                RIGHT = right
             if prob > best:
                 best = prob
                 Y = left
                 Z = right
+   
+    if i == 0 and j == len(sent) - 1:
+        print "AND THE FINAL RESULTS ARE:"
+        print LEFT, best_left, RIGHT, best_right
 
     return Y, Z, best
 
@@ -84,5 +97,5 @@ def write_trees(json_trees, dest_name):
             dest.write('\n')
 
 if __name__ == '__main__':
-    main(ProbGen('new.counts'), 'problem_sentences.dat', 'out_problem.dat')
+    main(ProbGen('new.counts'), 'problem_sentences.dat', 'problem_out.dat')
 
