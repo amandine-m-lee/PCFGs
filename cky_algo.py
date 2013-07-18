@@ -54,19 +54,14 @@ def get_max_of_all(i, j, sent, X, pg):
             right, p_right = cky_help(s+1, j, sent, z, pg)
             
             prob = p_right + p_left + p_rule
-            if i == 0 and j == len(sent) - 1:
-                print y, z, p_rule, p_right, p_left
+            #if i == 0 and j == len(sent) - 1:
+             #   print y, z, p_rule, p_right, p_left
 
 
             if prob > best:
                 best = prob
                 Y = left
                 Z = right
-
-
-    """if Y is None or Z is None:
-        print sent[i:j+1]
-        print X, rule_possibilites"""
 
     return Y, Z, best
 
