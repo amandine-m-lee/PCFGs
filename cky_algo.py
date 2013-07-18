@@ -1,4 +1,4 @@
-import json
+import json, pdb, math
 from prob_generator import ProbGen
 
 PI = {}
@@ -18,7 +18,11 @@ def cky_recursive(sentence, probgen):
     print sentence
     global PI 
     PI = {}
-    return cky_help(0, len(sentence) - 1, sentence, 'S', probgen)
+    if sentence[-1] == '?':
+        return cky_help(0, len(sentence) - 1, sentence, 'SBARQ', probgen)
+    else:
+        return cky_help(0, len(sentence) - 1, sentence, 'S', probgen)
+
 
 def cky_help(i,j, sent, X, pg):
 
@@ -74,5 +78,5 @@ def write_trees(json_trees, dest_name):
             dest.write('\n')
 
 if __name__ == '__main__':
-    main(ProbGen('new.counts'), 'parse_dev.dat', 'out_dev.dat')
+    main(ProbGen('new.counts'), 'problem_sentences.dat', 'out_problem.dat')
 
