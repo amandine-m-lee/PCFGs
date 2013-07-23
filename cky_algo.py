@@ -69,29 +69,13 @@ def get_max_of_all(i, j, sent, X, pg):
             right, p_right = cky_help(s+1, j, sent, z, pg)
             
             prob = p_right + p_left + p_rule
-<<<<<<< Updated upstream
-            if i == 0 and j == len(sent) - 1:
-                print y, z, rule, p_rule, left, p_left, right, p_left
-            
-            if best_left < p_left:
-                best_left = p_left
-                LEFT = left
-            if best_right < p_right:
-                best_right = p_right
-                RIGHT = right
-            if prob > best:
-=======
+
 
             if prob > best: #Update
->>>>>>> Stashed changes
                 best = prob
                 Y = left
                 Z = right
    
-    if i == 0 and j == len(sent) - 1:
-        print "AND THE FINAL RESULTS ARE:"
-        print LEFT, best_left, RIGHT, best_right
-
     return Y, Z, best
 
 def get_sentences(rawname):
@@ -113,9 +97,6 @@ def write_trees(json_trees, dest_name):
             dest.write('\n')
 
 if __name__ == '__main__':
-<<<<<<< Updated upstream
-    main(ProbGen('new.counts'), 'problem_sentences.dat', 'problem_out.dat')
-=======
+
     main(ProbGen('new.counts'), 'parse_dev.dat', 'latest_out.dat')
->>>>>>> Stashed changes
 
