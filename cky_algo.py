@@ -1,11 +1,14 @@
 import json, pdb, math
 from prob_generator import ProbGen
 
+#The probability table cache
 PI = {}
 
 def main(pg, rawname, destname):
-#It should return a list of json encoded trees. 
-#How do I create a json thingy?    
+    """The main function takes a ProbGen class, the name of the file with newline separated 
+    sentences of the passages to be analyzed, and the name of the file to be written with the
+    json encoded trees."""
+
     sentences = get_sentences(rawname)
 
     py_trees = [cky_recursive(sent, pg) for sent in sentences]
@@ -15,9 +18,13 @@ def main(pg, rawname, destname):
 
 
 def cky_recursive(sentence, probgen):
+    """Accepts a sentence (list of words) and a probability generator class, returns 
+    a nested list of strings representing the tree"""
+
     print sentence
     global PI 
-    PI = {}
+    PI = {} #Initialize a fresh cache
+    #Check sentence type
     if sentence[-1] == '?':
         return cky_help(0, len(sentence) - 1, sentence, 'SBARQ', probgen)
     else:
@@ -25,20 +32,24 @@ def cky_recursive(sentence, probgen):
 
 
 def cky_help(i,j, sent, X, pg):
+    """Accepting the starting position i, ending position j, sentence, parent tag X, and a 
+    probability generator pg, it returns a string with the most likely subtree given the 
+    info and the probability of that subtree"""
 
-    if i == j:
+    if i == j: #Analyzing a single word - must be a unary rule
         prob = pg.emm_prob(X, sent[i])
         return [X, sent[i]], prob
-    else:
-        if not (i, j, X) in PI:
+    else: #Binary rule
+        if not (i, j, X) in PI: #Check the cache
             PI[(i, j, X)] = get_max_of_all(i, j, sent, X, pg)
             
         left, right, prob = PI[(i, j, X)]
 
         return [X, left, right], prob
 
-        
 def get_max_of_all(i, j, sent, X, pg):
+    """Searches through all the combinations of split points and binary rules associated
+    with the root X, finding the max. Returns null and negative infinity if none found"""
     
     rule_possibilites = pg.binary_counts[X].keys()
     best = float("-inf")
@@ -58,6 +69,7 @@ def get_max_of_all(i, j, sent, X, pg):
             right, p_right = cky_help(s+1, j, sent, z, pg)
             
             prob = p_right + p_left + p_rule
+<<<<<<< Updated upstream
             if i == 0 and j == len(sent) - 1:
                 print y, z, rule, p_rule, left, p_left, right, p_left
             
@@ -68,6 +80,10 @@ def get_max_of_all(i, j, sent, X, pg):
                 best_right = p_right
                 RIGHT = right
             if prob > best:
+=======
+
+            if prob > best: #Update
+>>>>>>> Stashed changes
                 best = prob
                 Y = left
                 Z = right
@@ -78,9 +94,9 @@ def get_max_of_all(i, j, sent, X, pg):
 
     return Y, Z, best
 
-
-#Write a generator!
 def get_sentences(rawname):
+    """Opens the file of name rawname, returns an array of arrays of strings. The base unit is
+    a word"""
     with open(rawname) as f:
         return [line.split() for line in f.readlines()]
 
@@ -97,5 +113,9 @@ def write_trees(json_trees, dest_name):
             dest.write('\n')
 
 if __name__ == '__main__':
+<<<<<<< Updated upstream
     main(ProbGen('new.counts'), 'problem_sentences.dat', 'problem_out.dat')
+=======
+    main(ProbGen('new.counts'), 'parse_dev.dat', 'latest_out.dat')
+>>>>>>> Stashed changes
 
