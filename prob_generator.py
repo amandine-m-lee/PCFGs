@@ -74,7 +74,7 @@ class ProbGen(object):
             return src.readlines()
     
     def branching_prob(self, root, left, right):
-        """Returns p(left, right | root), i.e. the probability of a binary rule given
+        """Returns log(p(left, right | root)), i.e. the probability of a binary rule given
         the root"""
 
         num = self.binary_counts[root].get((left, right), None)
@@ -90,7 +90,7 @@ class ProbGen(object):
             return math.log(num/denom)
        
     def emm_prob(self, tag, word):
-        """Returns p(word | tag), the emission probability"""
+        """Returns log(p(word | tag)), the emission probability"""
         
         if word in self.unary_counts:
             num = self.unary_counts[word].get(tag, None)
