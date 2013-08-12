@@ -43,7 +43,7 @@ def cky_help(i,j, sent, X, pg):
         if not (i, j, X) in PI: #Check the cache
             PI[(i, j, X)] = get_max_of_all(i, j, sent, X, pg)
             
-        left, right, prob = PI[(i, j, X)]
+        s
 
         return [X, left, right], prob
 
